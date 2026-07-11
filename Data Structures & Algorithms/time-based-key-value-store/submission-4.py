@@ -1,0 +1,31 @@
+class TimeMap:
+
+    def __init__(self):
+        self.store = defaultdict(list) # key: (timestamp, value)
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        l, r = 0, len(self.store[key]) - 1
+        while l <= r:
+            m = (l + r) // 2
+            if self.store[key][m][0] > timestamp:
+                r = m - 1
+            else:
+                l = m + 1
+        self.store[key].insert(l, (timestamp, value))
+
+    def get(self, key: str, timestamp: int) -> str:
+        if key not in self.store:
+            return ""
+
+        res = ""
+        l, r = 0, len(self.store[key]) - 1
+        while l <= r:
+            m = (l + r) // 2
+            if self.store[key][m][0] == timestamp:
+                return self.store[key][m][1]
+            elif self.store[key][m][0] > timestamp:
+                r = m - 1
+            else:
+                res = self.store[key][m][1]
+                l = m + 1
+        return res
